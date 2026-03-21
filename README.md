@@ -1,3 +1,7 @@
+---
+title: "Looking Upon the Seven Hills and Beyond"
+author: "Siming Ma"
+---
 # Looking Upon the Seven Hills and Beyond
 ## Insights from San Francisco’s Property Tax Roll Data — Through the Lens of AI
 
@@ -25,11 +29,20 @@ Let’s get into it.
 # San Francisco Assessor Roll Data Analysis
 ## A portfolio-style structural study of value, neighborhood geography, and the Two Housing Circuits of San Francisco housing
 
+This project turns the San Francisco historical secured property tax roll into a geospatial housing analysis. The objective is not to estimate exact market prices, but to use the roll to explain how the city’s housing stock is distributed, how assessments differ across neighborhoods, and which parts of the stock actually circulate through the market.
+
+The central conclusion is straightforward: **San Francisco does not behave like a single unified housing market. It behaves like two overlapping housing circuits**.
+
+- The **legacy circuit** is older, more tightly held, and slower to re-enter the market.
+- The **circulation circuit** turns over more often, absorbs a larger share of new demand, and plays a disproportionate role in price discovery.
+
+The analysis builds that argument step by step using maps, value comparisons, building age, recent-sales filters, turnover measures, owner-occupancy proxies, and holding-period distributions.
+
 <p align="center">
-  <img src="./assets/01b_sf_district_reference_map.webp" alt="San Francisco district reference map" width="58%">
+  <img src="./assets/00_sf_district_reference_map.jpeg" alt="San Francisco district reference map" width="58%">
 </p>
 
-<p align="center"><em>District reference map used to interpret assessor-neighborhood labels in the tables below.</em></p>
+<p align="center"><em>District reference map used to interpret assessor-neighborhood labels in the tables below. (source: https://thefrontsteps.com/san-francisco-real-estate-district-maps/)</em></p>
 
 ---
 
@@ -43,15 +56,6 @@ The San Francisco secured property tax roll is a large administrative dataset. O
 - reveal why two homes in the same city can belong to very different economic worlds.
 
 This notebook approaches the assessor roll as a city-structure dataset rather than just a valuation table. The central objective is to understand not only **how much housing exists**, but **which parts of that housing stock are active, liquid, owner-oriented, investor-oriented, old, new, stable, or recycling through turnover**.
-
-That leads to the report's main conclusion:
-
-> **San Francisco does not behave like one unified housing market. It behaves like two overlapping housing circuits:**
->
-> - a **legacy circuit** of older, tightly held, slower-moving homes; and
-> - a **circulation circuit** of homes that return to the market more frequently and absorb a disproportionate share of new demand.
-
-This interpretation is built directly from the report's spatial maps, trend tables, ownership proxies, turnover summaries, and holding-period decay analysis.
 
 ---
 
@@ -86,15 +90,13 @@ This project is not trying to estimate true market prices from assessor data. It
 - The **homeowner exemption** is used as an **owner-occupied proxy**, not as a perfect legal classification.
 - **Years since last sale** is used to distinguish housing that is present in the city from housing that is actually participating in the city's current exchange process.
 
-That distinction becomes crucial later. A city can have a large housing stock on paper while still offering only a thin stream of homes for actual purchase. This report shows why.
+That distinction becomes crucial later. **A city can have a large housing stock on paper while still offering only a thin stream of homes for actual purchase**. This report shows why.
 
 ---
 
 ## Important interpretation note
 
-California's assessment structure matters throughout this report.
-
-Under Proposition 13, properties that have not changed hands in many years can carry assessed values far below current market value. By contrast, recently purchased homes are usually reassessed closer to contemporary market conditions. That means:
+California's assessment structure matters throughout this report. Under Proposition 13, properties that have not changed hands in many years can carry assessed values far below current market value. By contrast, recently purchased homes are usually reassessed closer to contemporary market conditions. That means:
 
 - long-held housing stock tells a story about **continuity and embedded ownership history**;
 - recently sold stock tells a story that is **closer to the current market**;
@@ -118,14 +120,6 @@ The assessor roll contains many detailed use codes. For citywide structure, the 
 
 The first question is simple but important: **what kinds of properties make up San Francisco's built environment, and where are they located?**
 
-### Figure 1. Citywide property-type map
-
-<p align="center">
-  <img src="./assets/01_citywide_property_type_map.png" alt="Citywide property-type map for 2024" width="80%">
-</p>
-
-<p align="center"><em>Static citywide point map showing the spatial concentration of major property types across San Francisco.</em></p>
-
 ### Key findings
 
 The neighborhood concentration pattern is strongly consistent with San Francisco's built form:
@@ -134,17 +128,22 @@ The neighborhood concentration pattern is strongly consistent with San Francisco
 - **Multi-family housing** is densest in urban neighborhoods such as Inner Mission, Central Richmond, Noe Valley, Inner Richmond, and Inner Sunset.
 - **Office and hotel uses** cluster in the downtown core—especially Financial District North, Union Square, Financial District South, South of Market, and Civic Center.
 - **Industrial parcels** concentrate in Bayview, Potrero Hill, South of Market, and Dogpatch / Central Waterfront.
-- Government / vacant land has its own distinct geography and does not behave like ordinary taxable housing stock.
+- **Government / vacant land** has its own distinct geography and does not behave like ordinary taxable housing stock.
 
 The map matters because raw counts alone cannot show whether a category is corridor-based, waterfront-oriented, diffuse, or core-concentrated.
 
-### Tables
+### Figure 1. Citywide property-type map
 
-<details>
-<summary><strong>Top 5 neighborhoods by property count within each property type</strong></summary>
+<p align="center">
+  <img src="./assets/01_citywide_property_type_map.png" alt="Citywide property-type map for 2024" width="80%">
+</p>
+
+<p align="center"><em>Static citywide point map showing the spatial concentration of major property types across San Francisco.</em></p>
+
+
+### Top 5 neighborhoods by property count within each property type
 
 <table>
-<caption>Top 5 neighborhoods by property count within each property type</caption>
 <thead>
 <tr>
 <th>Property Type</th>
@@ -235,14 +234,24 @@ The map matters because raw counts alone cannot show whether a category is corri
 </tbody>
 </table>
 
-</details>
-
 
 ---
 
 ## Section 2. How property types change over time
 
 This section shifts from a single-year map to long-run structure.
+
+### Key findings
+
+The roll composition is surprisingly stable, but not static.
+
+- In **2024**, the roll contains **154,886 single-family** records and **36,320 multi-family** records, confirming that residential parcels dominate the dataset by count.
+- Single-family records fell from **140,514 in 2010** to **132,843 in 2011**, a drop of about **5.5%**, before recovering and reaching a new high by 2024.
+- Multi-family records drifted down modestly from **37,941 in 2007** to **36,320 in 2024**, a decline of roughly **4.3%**.
+- Timeshare properties decline materially after 2020, which is plausibly related to pandemic-era stress in tourism-linked uses.
+- Smaller specialist categories are more cyclical. A few hundred records can look dramatic in percentage terms even when they remain small relative to the citywide stock.
+
+The broad takeaway is that **San Francisco's property inventory changes slowly**. That matters because many contemporary housing debates are driven not by rapid stock replacement, but by pressures imposed on a stock that is already largely built out.
 
 ### Figure 2. Property counts over time by category
 
@@ -260,29 +269,11 @@ This section shifts from a single-year map to long-run structure.
 
 <p align="center"><em>Long-run mean composition of the property roll by category.</em></p>
 
-### Observations
-
-The roll composition is surprisingly stable, but not static.
-
-- In **2024**, the roll contains **154,886 single-family** records and **36,320 multi-family** records, confirming that residential parcels dominate the dataset by count.
-- Single-family records fell from **140,514 in 2010** to **132,843 in 2011**, a drop of about **5.5%**, before recovering and reaching a new high by 2024.
-- Multi-family records drifted down modestly from **37,941 in 2007** to **36,320 in 2024**, a decline of roughly **4.3%**.
-- Timeshare properties decline materially after 2020, which is plausibly related to pandemic-era stress in tourism-linked uses.
-- Smaller specialist categories are more cyclical. A few hundred records can look dramatic in percentage terms even when they remain small relative to the citywide stock.
-
-The broad takeaway is that **San Francisco's property inventory changes slowly**. That matters because many contemporary housing debates are driven not by rapid stock replacement, but by pressures imposed on a stock that is already largely built out.
-
-### Table
-
-
-<details>
-<summary><strong>Property counts by type and roll year</strong></summary>
+### Property counts by type and roll year
 
 <table>
-<caption>Property counts by type and roll year</caption>
 <thead>
 <tr>
-<th>use_code</th>
 <th>Roll Year</th>
 <th>1 Single Family (SRES)</th>
 <th>2 Multi Family (MRES)</th>
@@ -297,7 +288,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 </thead>
 <tbody>
 <tr>
-<th>0</th>
 <td>2007</td>
 <td>135,285</td>
 <td>37,941</td>
@@ -310,7 +300,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>6,104</td>
 </tr>
 <tr>
-<th>1</th>
 <td>2008</td>
 <td>137,685</td>
 <td>37,641</td>
@@ -323,7 +312,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>6,116</td>
 </tr>
 <tr>
-<th>2</th>
 <td>2009</td>
 <td>138,894</td>
 <td>37,313</td>
@@ -336,7 +324,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>6,044</td>
 </tr>
 <tr>
-<th>3</th>
 <td>2010</td>
 <td>140,514</td>
 <td>37,674</td>
@@ -349,7 +336,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,993</td>
 </tr>
 <tr>
-<th>4</th>
 <td>2011</td>
 <td>132,843</td>
 <td>36,906</td>
@@ -362,7 +348,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,603</td>
 </tr>
 <tr>
-<th>5</th>
 <td>2012</td>
 <td>142,250</td>
 <td>37,000</td>
@@ -375,7 +360,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,980</td>
 </tr>
 <tr>
-<th>6</th>
 <td>2013</td>
 <td>143,707</td>
 <td>36,766</td>
@@ -388,7 +372,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>6,069</td>
 </tr>
 <tr>
-<th>7</th>
 <td>2014</td>
 <td>144,987</td>
 <td>36,518</td>
@@ -401,7 +384,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,811</td>
 </tr>
 <tr>
-<th>8</th>
 <td>2015</td>
 <td>146,447</td>
 <td>37,614</td>
@@ -414,7 +396,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,862</td>
 </tr>
 <tr>
-<th>9</th>
 <td>2016</td>
 <td>147,881</td>
 <td>38,099</td>
@@ -427,7 +408,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,721</td>
 </tr>
 <tr>
-<th>10</th>
 <td>2017</td>
 <td>147,863</td>
 <td>37,857</td>
@@ -440,7 +420,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,628</td>
 </tr>
 <tr>
-<th>11</th>
 <td>2018</td>
 <td>150,608</td>
 <td>37,220</td>
@@ -453,7 +432,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,863</td>
 </tr>
 <tr>
-<th>12</th>
 <td>2019</td>
 <td>151,720</td>
 <td>36,829</td>
@@ -466,7 +444,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,889</td>
 </tr>
 <tr>
-<th>13</th>
 <td>2020</td>
 <td>151,706</td>
 <td>36,720</td>
@@ -479,7 +456,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,857</td>
 </tr>
 <tr>
-<th>14</th>
 <td>2021</td>
 <td>153,042</td>
 <td>36,514</td>
@@ -492,7 +468,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,776</td>
 </tr>
 <tr>
-<th>15</th>
 <td>2022</td>
 <td>153,731</td>
 <td>36,463</td>
@@ -505,7 +480,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,633</td>
 </tr>
 <tr>
-<th>16</th>
 <td>2023</td>
 <td>154,421</td>
 <td>36,375</td>
@@ -518,7 +492,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 <td>5,468</td>
 </tr>
 <tr>
-<th>17</th>
 <td>2024</td>
 <td>154,886</td>
 <td>36,320</td>
@@ -532,9 +505,6 @@ The broad takeaway is that **San Francisco's property inventory changes slowly**
 </tr>
 </tbody>
 </table>
-
-</details>
-
 
 ---
 
@@ -551,15 +521,7 @@ This section therefore separates two questions:
 1. **What is the median assessed value of a typical parcel in each category?**
 2. **What is the aggregate assessed value contribution of that category to the city's tax base?**
 
-### Figure 4. Median and total assessed value by property type
-
-<p align="center">
-  <img src="./assets/04_median_and_total_assessed_value_by_type.png" alt="Median and total assessed value by property type" width="100%">
-</p>
-
-<p align="center"><em>Median parcel value and aggregate citywide assessed value across major property types.</em></p>
-
-### Observations
+### Key findings
 
 At the individual-parcel level:
 
@@ -578,17 +540,20 @@ This is an important interpretive distinction:
 
 > A category may matter because it is **numerous** (single-family / multi-family), because it is **valuable per parcel** (office / hotel), or because it combines both. Median parcel value and aggregate tax-base contribution answer different policy questions.
 
-### Tables
+### Figure 4. Median and total assessed value by property type
+
+<p align="center">
+  <img src="./assets/04_median_and_total_assessed_value_by_type.png" alt="Median and total assessed value by property type" width="100%">
+</p>
+
+<p align="center"><em>Median parcel value and aggregate citywide assessed value across major property types.</em></p>
 
 
-<details>
-<summary><strong>Median assessed value by property type and roll year</strong></summary>
+### Median assessed value by property type and roll year
 
 <table>
-<caption>Median assessed value by property type and roll year</caption>
 <thead>
 <tr>
-<th>use_code</th>
 <th>Roll Year</th>
 <th>1 Single Family (SRES)</th>
 <th>2 Multi Family (MRES)</th>
@@ -603,7 +568,6 @@ This is an important interpretive distinction:
 </thead>
 <tbody>
 <tr>
-<th>0</th>
 <td>2007</td>
 <td>$0.316M</td>
 <td>$0.426M</td>
@@ -616,7 +580,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>1</th>
 <td>2008</td>
 <td>$0.342M</td>
 <td>$0.449M</td>
@@ -629,7 +592,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>2</th>
 <td>2009</td>
 <td>$0.363M</td>
 <td>$0.469M</td>
@@ -642,7 +604,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>3</th>
 <td>2010</td>
 <td>$0.368M</td>
 <td>$0.470M</td>
@@ -655,7 +616,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>4</th>
 <td>2011</td>
 <td>$0.382M</td>
 <td>$0.487M</td>
@@ -668,7 +628,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>5</th>
 <td>2012</td>
 <td>$0.400M</td>
 <td>$0.513M</td>
@@ -681,7 +640,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>6</th>
 <td>2013</td>
 <td>$0.421M</td>
 <td>$0.538M</td>
@@ -694,7 +652,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>7</th>
 <td>2015</td>
 <td>$0.468M</td>
 <td>$0.570M</td>
@@ -707,7 +664,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>8</th>
 <td>2016</td>
 <td>$0.499M</td>
 <td>$0.589M</td>
@@ -720,7 +676,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>9</th>
 <td>2017</td>
 <td>$0.529M</td>
 <td>$0.651M</td>
@@ -733,7 +688,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>10</th>
 <td>2018</td>
 <td>$0.563M</td>
 <td>$0.698M</td>
@@ -746,7 +700,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>11</th>
 <td>2019</td>
 <td>$0.597M</td>
 <td>$0.757M</td>
@@ -759,7 +712,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>12</th>
 <td>2020</td>
 <td>$0.632M</td>
 <td>$0.803M</td>
@@ -772,7 +724,6 @@ This is an important interpretive distinction:
 <td>$0.001M</td>
 </tr>
 <tr>
-<th>13</th>
 <td>2021</td>
 <td>$0.655M</td>
 <td>$0.835M</td>
@@ -785,7 +736,6 @@ This is an important interpretive distinction:
 <td>$0.000M</td>
 </tr>
 <tr>
-<th>14</th>
 <td>2022</td>
 <td>$0.689M</td>
 <td>$0.883M</td>
@@ -798,7 +748,6 @@ This is an important interpretive distinction:
 <td>$0.000M</td>
 </tr>
 <tr>
-<th>15</th>
 <td>2023</td>
 <td>$0.722M</td>
 <td>$0.942M</td>
@@ -811,7 +760,6 @@ This is an important interpretive distinction:
 <td>$0.000M</td>
 </tr>
 <tr>
-<th>16</th>
 <td>2024</td>
 <td>$0.747M</td>
 <td>$0.994M</td>
@@ -826,18 +774,12 @@ This is an important interpretive distinction:
 </tbody>
 </table>
 
-</details>
 
-
-
-<details>
-<summary><strong>Total assessed value by property type and roll year</strong></summary>
+### Total assessed value by property type and roll year
 
 <table>
-<caption>Total assessed value by property type and roll year</caption>
 <thead>
 <tr>
-<th>use_code</th>
 <th>Roll Year</th>
 <th>1 Single Family (SRES)</th>
 <th>2 Multi Family (MRES)</th>
@@ -852,7 +794,6 @@ This is an important interpretive distinction:
 </thead>
 <tbody>
 <tr>
-<th>0</th>
 <td>2007</td>
 <td>$58.102B</td>
 <td>$25.822B</td>
@@ -865,7 +806,6 @@ This is an important interpretive distinction:
 <td>$2.372B</td>
 </tr>
 <tr>
-<th>1</th>
 <td>2008</td>
 <td>$63.730B</td>
 <td>$27.665B</td>
@@ -878,7 +818,6 @@ This is an important interpretive distinction:
 <td>$2.487B</td>
 </tr>
 <tr>
-<th>2</th>
 <td>2009</td>
 <td>$67.242B</td>
 <td>$29.765B</td>
@@ -891,7 +830,6 @@ This is an important interpretive distinction:
 <td>$2.594B</td>
 </tr>
 <tr>
-<th>3</th>
 <td>2010</td>
 <td>$68.582B</td>
 <td>$30.824B</td>
@@ -904,7 +842,6 @@ This is an important interpretive distinction:
 <td>$2.647B</td>
 </tr>
 <tr>
-<th>4</th>
 <td>2011</td>
 <td>$67.325B</td>
 <td>$29.628B</td>
@@ -917,7 +854,6 @@ This is an important interpretive distinction:
 <td>$1.874B</td>
 </tr>
 <tr>
-<th>5</th>
 <td>2012</td>
 <td>$74.551B</td>
 <td>$32.143B</td>
@@ -930,7 +866,6 @@ This is an important interpretive distinction:
 <td>$2.796B</td>
 </tr>
 <tr>
-<th>6</th>
 <td>2013</td>
 <td>$79.057B</td>
 <td>$33.542B</td>
@@ -943,7 +878,6 @@ This is an important interpretive distinction:
 <td>$2.862B</td>
 </tr>
 <tr>
-<th>7</th>
 <td>2015</td>
 <td>$89.967B</td>
 <td>$39.110B</td>
@@ -956,7 +890,6 @@ This is an important interpretive distinction:
 <td>$3.056B</td>
 </tr>
 <tr>
-<th>8</th>
 <td>2016</td>
 <td>$97.172B</td>
 <td>$44.219B</td>
@@ -969,7 +902,6 @@ This is an important interpretive distinction:
 <td>$2.354B</td>
 </tr>
 <tr>
-<th>9</th>
 <td>2017</td>
 <td>$103.240B</td>
 <td>$49.123B</td>
@@ -982,7 +914,6 @@ This is an important interpretive distinction:
 <td>$4.021B</td>
 </tr>
 <tr>
-<th>10</th>
 <td>2018</td>
 <td>$112.237B</td>
 <td>$55.022B</td>
@@ -995,7 +926,6 @@ This is an important interpretive distinction:
 <td>$5.643B</td>
 </tr>
 <tr>
-<th>11</th>
 <td>2019</td>
 <td>$120.254B</td>
 <td>$59.970B</td>
@@ -1008,7 +938,6 @@ This is an important interpretive distinction:
 <td>$4.976B</td>
 </tr>
 <tr>
-<th>12</th>
 <td>2020</td>
 <td>$127.742B</td>
 <td>$63.681B</td>
@@ -1021,7 +950,6 @@ This is an important interpretive distinction:
 <td>$6.511B</td>
 </tr>
 <tr>
-<th>13</th>
 <td>2021</td>
 <td>$133.022B</td>
 <td>$65.078B</td>
@@ -1034,7 +962,6 @@ This is an important interpretive distinction:
 <td>$7.897B</td>
 </tr>
 <tr>
-<th>14</th>
 <td>2022</td>
 <td>$141.812B</td>
 <td>$68.732B</td>
@@ -1047,7 +974,6 @@ This is an important interpretive distinction:
 <td>$6.150B</td>
 </tr>
 <tr>
-<th>15</th>
 <td>2023</td>
 <td>$149.214B</td>
 <td>$71.961B</td>
@@ -1060,7 +986,6 @@ This is an important interpretive distinction:
 <td>$5.808B</td>
 </tr>
 <tr>
-<th>16</th>
 <td>2024</td>
 <td>$154.026B</td>
 <td>$74.695B</td>
@@ -1074,8 +999,6 @@ This is an important interpretive distinction:
 </tr>
 </tbody>
 </table>
-
-</details>
 
 
 ---
@@ -1091,17 +1014,9 @@ This narrower focus is analytically useful because these are the property types 
 
 ---
 
-## Section 5A. Where are the more expensive and the more affordable neighborhoods?
+## Section 4A. Where are the more expensive and the more affordable neighborhoods?
 
-### Figure 5. 2024 assessed value maps: single-family vs condominiums
-
-<p align="center">
-  <img src="./assets/05_total_assessed_value_maps_single_family_vs_condo.png" alt="2024 assessed value maps for single-family homes and condominiums" width="100%">
-</p>
-
-<p align="center"><em>Neighborhood-level geography of total assessed value for the two headline housing segments.</em></p>
-
-### Observations
+### Key findings:
 
 For **single-family homes**:
 
@@ -1115,18 +1030,17 @@ For **condominiums**:
 - The low end is **Mount Davidson Manor** at **$0.449M**.
 - The spread is much narrower, about **3.6x**.
 
-This difference is revealing. Single-family values combine:
+This difference is revealing. Single-family values combine: neighborhood prestige, lot size, structure size, and embedded scarcity. Condo values are still highly unequal, but their narrower spread suggests a stronger role for: location, building typology, and urban access rather than lot scale.
 
-- neighborhood prestige,
-- lot size,
-- structure size,
-- and embedded scarcity.
+### Figure 5. 2024 assessed value maps: single-family vs condominiums
 
-Condo values are still highly unequal, but their narrower spread suggests a stronger role for:
+<p align="center">
+  <img src="./assets/05_total_assessed_value_maps_single_family_vs_condo.png" alt="2024 assessed value maps for single-family homes and condominiums" width="100%">
+</p>
 
-- location,
-- building typology,
-- and urban access rather than lot scale.
+<p align="center"><em>Neighborhood-level geography of total assessed value for the two headline housing segments.</em></p>
+
+
 
 ### Tables
 
@@ -1432,24 +1346,14 @@ Condo values are still highly unequal, but their narrower spread suggests a stro
 
 ---
 
-## Section 5B. What about assessed value per square foot?
+## Section 4B. What about assessed value per square foot?
 
-Total assessed value is partly a size story. To separate size from value intensity, the notebook turns to **assessed value per square foot**.
-
-This is not the same as observed market sale price per square foot, but it is highly informative because it distinguishes:
+Total assessed value is partly a size story. To separate size from value intensity, the notebook turns to **assessed value per square foot**. This is not the same as observed market sale price per square foot, but it is highly informative because it distinguishes:
 
 - neighborhoods where homes are valuable mainly because they are **large**, and
 - neighborhoods where each unit of housing space is itself **highly valued**.
 
-### Figure 6. Assessed value per square foot maps
-
-<p align="center">
-  <img src="./assets/06_assessed_value_per_sqft_maps.png" alt="Assessed value per square foot maps" width="100%">
-</p>
-
-<p align="center"><em>Spatial pattern of value intensity after normalizing for interior area.</em></p>
-
-### Observations
+### Key findings:
 
 For **single-family homes**:
 
@@ -1460,13 +1364,17 @@ For **condominiums**:
 
 - The top tier is distinctly downtown and redevelopment oriented: **Financial District South ($1,145/sq ft)**, **Central Waterfront / Dogpatch ($1,145/sq ft)**, **South Beach ($1,142/sq ft)**, and **Mission Bay ($1,047/sq ft)**.
 
-This is a strong result. The condo market appears to price:
+This is a strong result. The condo market appears to price access to employment, waterfront redevelopment, and dense amenity clusters more directly than the single-family market does. The single-family market still prices prestige neighborhoods very highly, but its geography remains less exclusively downtown-oriented.
 
-- access to employment,
-- waterfront redevelopment,
-- and dense amenity clusters
+### Figure 6. Assessed value per square foot maps
 
-more directly than the single-family market does. The single-family market still prices prestige neighborhoods very highly, but its geography remains less exclusively downtown-oriented.
+<p align="center">
+  <img src="./assets/06_assessed_value_per_sqft_maps.png" alt="Assessed value per square foot maps" width="100%">
+</p>
+
+<p align="center"><em>Spatial pattern of value intensity after normalizing for interior area.</em></p>
+
+
 
 ### Tables
 
@@ -1772,7 +1680,7 @@ more directly than the single-family market does. The single-family market still
 
 ---
 
-## Section 5C. How old are the buildings?
+## Section 4C. How old are the buildings?
 
 Building age adds a structural time dimension. It can proxy for:
 
@@ -1783,15 +1691,7 @@ Building age adds a structural time dimension. It can proxy for:
 - functional obsolescence,
 - and the degree to which housing stock is a legacy inheritance versus a newer supply wave.
 
-### Figure 7. Building-age maps
-
-<p align="center">
-  <img src="./assets/07_building_age_maps.png" alt="Building age maps" width="100%">
-</p>
-
-<p align="center"><em>Neighborhood geography of median building age for single-family homes and condos.</em></p>
-
-### Observations
+### Key findings
 
 For **single-family housing**:
 
@@ -1813,8 +1713,16 @@ This contrast is one of the report's most durable findings:
 
 That age difference later lines up closely with turnover, ownership, and market-circulation results.
 
-### Tables
+### Figure 7. Building-age maps
 
+<p align="center">
+  <img src="./assets/07_building_age_maps.png" alt="Building age maps" width="100%">
+</p>
+
+<p align="center"><em>Neighborhood geography of median building age for single-family homes and condos.</em></p>
+
+
+### Tables
 
 <details>
 <summary><strong>Oldest single-family neighborhoods in the 2024 roll</strong></summary>
@@ -2117,11 +2025,25 @@ That age difference later lines up closely with turnover, ownership, and market-
 
 ---
 
-## Section 5D. Where are the recently sold homes?
+## Section 4D. Where are the recently sold homes?
 
-Because Proposition 13 anchors many long-held assessments to old base-year values, the most market-relevant subset of the roll is often the housing that has sold recently.
+Because Proposition 13 ties many long-held properties to old base-year assessments, the most market-relevant part of the roll is often the subset of homes that has sold recently. This section isolates homes sold in the **last five years** and asks two related questions:
 
-This section isolates homes sold in the **last five years** and examines their 2024 assessed values. The goal is not to reconstruct transaction prices, but to narrow attention to properties whose assessments are more likely to be closer to current conditions.
+1. Which neighborhoods are contributing the largest number of recent sales?
+2. How different are recent-sale neighborhood medians from the medians for the full stock?
+
+### Key findings:
+
+Section 4D is the bridge from neighborhood geography to market structure.
+
+- For **single-family homes**, the neighborhoods with the largest number of recent transactions include **Bernal Heights**, **Noe Valley**, and **Excelsior**. Their recently sold medians are much closer to contemporary expectations than the all-stock medians.
+- For **condominiums**, recent activity is concentrated in **South Beach**, **Pacific Heights**, **Inner Mission**, **Mission Bay**, and nearby dense urban neighborhoods. This is already a sign that the condo segment is carrying a disproportionate share of current market flow.
+- The recent-vs-all scatter makes the Proposition 13 effect visible. Neighborhoods with a large long-held stock can look artificially cheap on the roll because many parcels are still anchored to older assessments.
+- That means the assessor roll is strong for **relative comparison** and **spatial structure**, but it must be handled carefully for statements about the current absolute price level.
+- Filtering to the last five years gives a clearer view of the **current marginal market**: the homes that are actually resetting assessments and absorbing present-day demand.
+- The trade-off is selectivity. This filter improves market relevance but narrows the analysis to a thinner subset of stock.
+
+That final point sets up the next section. Once the report separates **total stock** from **recently circulating stock**, it becomes possible to ask which housing segments actually turn over and what kind of post-purchase occupancy they appear to produce.
 
 ### Figure 8. Recently sold homes in the last five years
 
@@ -2129,20 +2051,23 @@ This section isolates homes sold in the **last five years** and examines their 2
   <img src="./assets/08_recent_sales_maps_last_5_years.png" alt="Recently sold homes in the last five years" width="100%">
 </p>
 
-<p align="center"><em>Maps focused on the recent-sales subset, where assessor values are closer to current conditions.</em></p>
-
-### Interpretation
-
-This section is the bridge between static geography and active market structure. It shows which neighborhoods are not only valuable, but also **participating in current market exchange**. In a Proposition 13 context, this matters enormously: a neighborhood may be wealthy in the stock sense while still contributing only a small trickle of homes to the active market.
-
-### Tables
+<p align="center"><em>Maps focused on the recent-sales subset, where assessor values are more likely to reflect contemporary conditions than long-held legacy stock.</em></p>
 
 
-<details>
-<summary><strong>Single-family neighborhoods with the highest number of recent transactions</strong></summary>
+### Figure 9. Proposition 13 effect on neighborhood medians
+
+<p align="center">
+  <img src="./assets/09_prop13_effect_recent_vs_all_stock.png" alt="Effect of Proposition 13 on neighborhood medians" width="90%">
+</p>
+
+<p align="center"><em>Neighborhood median assessed values based on the full housing stock versus recently transacted homes only. Points above the diagonal indicate that recently sold properties are assessed above the all-stock neighborhood median, revealing the pull of legacy assessments on the broader roll.</em></p>
+
+
+
+
+### Single-family neighborhoods with the highest number of recent transactions
 
 <table>
-<caption>Single-family neighborhoods with the highest number of recent transactions</caption>
 <thead>
 <tr>
 <th> </th>
@@ -2209,15 +2134,9 @@ This section is the bridge between static geography and active market structure.
 </tbody>
 </table>
 
-</details>
-
-
-
-<details>
-<summary><strong>Condominium neighborhoods with the highest number of recent transactions</strong></summary>
+### Condominium neighborhoods with the highest number of recent transactions
 
 <table>
-<caption>Condominium neighborhoods with the highest number of recent transactions</caption>
 <thead>
 <tr>
 <th> </th>
@@ -2284,85 +2203,40 @@ This section is the bridge between static geography and active market structure.
 </tbody>
 </table>
 
-</details>
-
 
 ---
 
-## Section 5E. Owner-occupied vs rental-oriented properties
+## Section 4E. Market composition, turnover, and buyer profile
 
-This is one of the most important sections in the notebook.
-
-It combines three lenses:
+This section brings together the key measures behind the **Two Housing Circuits** interpretation:
 
 - the size of each housing stock,
-- the recent turnover rate,
-- and the share of homes that appear owner-occupied based on the homeowner exemption flag.
+- the share that appears owner-occupied,
+- the number of homes sold in the last five years,
+- and the occupancy profile of those recent purchases.
 
-That combination allows the report to distinguish between:
+The homeowner exemption should be treated as a **proxy** for owner occupancy, not a perfect legal classification. Even so, once it is combined with turnover, it becomes highly informative.
 
-- neighborhoods dominated by stable owner households,
-- neighborhoods that appear more renter- or investor-facing,
-- and segments that contribute disproportionately to current market flow.
+### Key findings
 
-### Core result: the Two Housing Circuits emerge here
+This is the section brings up the report’s central argument.
 
-The results show that San Francisco does **not** operate as one unified housing market. Instead, it behaves through **Two Housing Circuits**:
+- The analysis set contains **94,844 single-family homes** and **52,042 condominiums**. Single-family housing dominates the stock in San Francisco (**roughly a 2:1 ratio of single-family versus condos**).
+- But the flow story is different. Only **8,531** single-family homes sold in the last five years (**9.0%** of stock), while **10,520** condos sold (**20.2%** of stock). The smaller condo segment generated more sales than the much larger single-family segment.
+- Owner occupancy is **55.6%** for single-family homes and **34.2%** for condos. That gap shows the single-family stock is more rooted in long-duration household holding, while condos are more exposed to rental and investment use.
+- Among recent purchases, the contrast narrows sharply: only **27.8%** of recently purchased single-family homes and **24.0%** of recently purchased condos appear owner-occupied. In both segments, most recent purchases appear to sit outside the owner-occupied category after sale. In other words, **for every 4 properties transacted in San Francisco, 3 are bought by investors and 1 is bought by onwer-occupier**.
+- This is the key structural result: **single-family homes dominate the stock, but condos dominate the flow**.
+- It also suggests that investor or non-owner-occupying demand is not confined to condos. Once a home enters the active market, both single-family homes and condos appear to face substantial competition from buyers who do not immediately occupy the property.
 
-- a **legacy circuit** of tightly held homes; and
-- a **circulation circuit** of homes that re-enter the market and absorb new demand.
+Read together, these results support the **Two Housing Circuits** interpretation.
 
-### Key numerical findings
-
-- The analysis set contains **94,844 single-family homes** and **52,042 condominiums**.
-- The apparent owner-occupied share is **55.6%** for single-family homes but only **34.2%** for condos.
-- That is a **21.4 percentage-point gap**, suggesting condos play a much larger renter- and investor-facing role.
-- Recent turnover differs sharply:
-  - **8,531 single-family homes** sold in the last five years (**9.0%** of stock)
-  - **10,520 condos** sold in the last five years (**20.2%** of stock)
-- So the condo stock turns over at **more than 2.2x** the single-family rate.
-- Among recently purchased homes, only **27.8%** of single-family acquisitions and **24.0%** of condo acquisitions appear owner-occupied via exemption code 11.
-- The remaining shares—**72.2%** for recently purchased single-family homes and **76.0%** for recently purchased condos—appear not owner-occupied.
-
-### Why this matters
-
-This section completely changes how the city's housing stock should be interpreted.
-
-#### 1. Single-family homes dominate the stock, but not the active market
-
-There are many more single-family homes overall, yet fewer of them transact over a five-year window than condos. That means headline stock counts and accessible market stock are telling different stories.
-
-#### 2. Condominiums function as circulation housing
-
-Even though condos are a much smaller stock, they generate more recent transactions and appear far more exposed to renter and investor demand. They are, in practical terms, carrying much more of the city's turnover burden.
-
-#### 3. Single-family housing increasingly resembles legacy housing
-
-A majority appears owner-occupied, turnover is low, and a large part of the stock sits outside the normal flow of market exchange. In other words, a substantial share of the city's single-family stock exists physically without functioning as active entry inventory.
-
-### The most important insight in Section 5E
-
-A particularly strong finding is that **recently transacted units in both property types look overwhelmingly non-owner-occupied after purchase**.
-
-This pushes against a common simplified narrative:
-
-- single-family homes are supposedly contested mainly by owner-occupiers;
-- condos are supposedly the investor segment.
-
-The evidence here suggests something more subtle and more consequential:
-
-> **Once a home enters the circulation circuit, both single-family homes and condos appear to face a similar competitive environment. Investors and non-owner-occupying buyers are not confined to condos alone; they compete for both when those homes come onto the market.**
-
-That means a household trying to buy into San Francisco is not just competing in a condo-only investor arena. It appears to face competition across the broader active market.
-
-### Tables
+- The **legacy circuit** is larger, older, more owner-oriented, and slower to recycle.
+- The **circulation circuit** is smaller, but it turns over more often and does more of the work of absorbing current demand.
 
 
-<details>
-<summary><strong>Occupancy and recent turnover by housing type</strong></summary>
+### Occupancy and recent turnover by housing type
 
 <table>
-<caption>Occupancy and recent turnover by housing type</caption>
 <thead>
 <tr>
 <th> </th>
@@ -2393,23 +2267,18 @@ That means a household trying to buy into San Francisco is not just competing in
 </tbody>
 </table>
 
-</details>
 
-
-
-<details>
-<summary><strong>Occupancy mix among units purchased in the last 5 years</strong></summary>
+### Occupancy mix among units purchased in the last 5 years
 
 <table>
-<caption>Occupancy mix among units purchased in the last 5 years</caption>
 <thead>
 <tr>
 <th> </th>
 <th>Units sold in last 5 years</th>
 <th>Recent purchases that are owner-occupied</th>
-<th>Owner-occupied share among recent purchases</th>
+<th>Owner-occupied share</th>
 <th>Recent purchases that appear renter-occupied</th>
-<th>Renter-occupied share among recent purchases</th>
+<th>Renter-occupied share</th>
 </tr>
 </thead>
 <tbody>
@@ -2432,65 +2301,69 @@ That means a household trying to buy into San Francisco is not just competing in
 </tbody>
 </table>
 
-</details>
-
-
----
-
-## Section 5F. Number of years since last sale
-
-Section 5E introduces the Two Housing Circuits through ownership and recent turnover. Section 5F deepens the argument by asking the dynamic question:
-
-> **How long do homes stay in the same ownership before returning to the market?**
-
-This is where the distinction between **legacy stock** and **circulating stock** becomes especially visible.
-
-### Figure 9. Years since last sale maps
+### Figure 10. Market composition, turnover, and buyer profile
 
 <p align="center">
-  <img src="./assets/09_years_since_last_sale_maps.png" alt="Years since last sale maps" width="100%">
+  <img src="./assets/10_market_composition_and_buyer_profile.png" alt="Market composition, turnover, and buyer profile" width="100%">
 </p>
 
-<p align="center"><em>Spatial turnover map showing how long each part of the city has held its housing stock.</em></p>
+<p align="center"><em>The stock is larger for single-family homes, but turnover is much higher for condos. In both segments, most recent purchases appear not to be owner-occupied.</em></p>
 
-### Figure 10. 2024 holding-period histograms
+
+--
+
+## Section 4F. Number of years since last sale
+
+Section 4E showed that the single-family stock is larger but much less active, while the condo stock is smaller but more market-facing. This section checks that interpretation directly through **years since last sale**.
+
+The question is simple: do the two property types show the same ownership rhythm, or do they follow different turnover structures? This is where the distinction between **legacy stock** and **circulating stock** becomes especially visible.
+
+### Key findings
+
+Section 4F turns the turnover argument into a dynamic one.
+
+- The **condo distribution** looks much more like a circulation market. Many units sold recently, and the counts thin out in a comparatively regular way as holding periods lengthen.
+- The **single-family distribution** does not. It contains a much heavier long-duration component, consistent with a large stock that stays in the same ownership for extended periods.
+- The decay fit sharpens the distinction. For **condominiums**, the fitted decay parameter is **λ = 0.078**, implying an estimated half-life of about **8.9 years**. That is strong evidence of a genuine circulation process.
+- For **single-family homes**, the fitted parameter is much flatter at **λ = 0.015**, with a notional half-life of about **46.2 years**. More important than the number itself is the weak fit: the single-family stock does not behave like clean recycling inventory.
+- In practical terms, condos behave like a segment that continually re-enters the market, while a large part of the single-family stock behaves like **legacy housing** — present in the city, but only weakly present in the active market.
+
+This is why the distinction between **total housing stock** and **circulating housing stock** matters so much. In a market where prices are set at the margin, the relevant supply is not simply the number of homes that exist. It is the number of homes that actually circulate.
+
+### Figure 11. Years since last sale maps
 
 <p align="center">
-  <img src="./assets/10_holding_period_histograms_2024.png" alt="2024 holding-period histograms" width="90%">
+  <img src="./assets/11_years_since_last_sale_maps.png" alt="Years since last sale maps" width="100%">
 </p>
 
-<p align="center"><em>Side-by-side distribution of years since last sale for single-family homes and condos in 2024.</em></p>
+<p align="center"><em>The spatial view of holding periods shows where the city contains recently circulating homes and where housing is embedded in much longer ownership histories.</em></p>
 
-### Figure 11. 2019 holding-period histograms
+### Figure 12. Holding-period histograms
 
 <p align="center">
-  <img src="./assets/11_holding_period_histograms_2019.png" alt="2019 holding-period histograms" width="90%">
+  <img src="./assets/12_holding_period_histograms_2019.png" alt="2019 holding-period histograms" width="90%">
 </p>
 
-<p align="center"><em>Pre-pandemic comparison showing that the 2021 spike seen in 2024 is not the long-run norm.</em></p>
+<p align="center"><em>Condos look much closer to a regular decay process, while single-family homes retain a much fatter long-duration tail.</em></p>
 
-### Figure 12. Decay-function fit comparison
+### Figure 13. Decay-function fit comparison
 
 <p align="center">
-  <img src="./assets/12_decay_function_fit.png" alt="Decay-function fit comparison" width="90%">
+  <img src="./assets/13_decay_function_fit.png" alt="Decay-function fit comparison" width="90%">
 </p>
 
-<p align="center"><em>Exponential decay fit illustrating a strong circulation pattern for condos and a weak fit for single-family homes.</em></p>
+<p align="center"><em>The decay-fit figure formalizes the contrast: condos behave like a genuine circulation market, while single-family homes only partially do so because much of the stock remains in a legacy holding pattern.</em></p>
 
-### Main observations from the holding-period figures
 
-- In the **2024** holding-period figures, both housing types show a concentration around homes sold roughly **3 years earlier**, corresponding to the **2021** market.
-- That spike is plausibly linked to the unusual pandemic housing cycle and should **not** be treated as the structural norm.
-- The **2019** figures confirm this point, because the spike disappears there.
+### Decay-function interpretation
+
 - The condo distribution looks much more like a **circulation market**:
   - many units sold recently,
   - counts fall away steadily as holding periods lengthen,
-  - and the histogram resembles a clear time-dependent decay process.
+  - and the histogram broadly resembles a time-dependent exponential decay process.
 - The single-family distribution does **not** behave that way nearly as cleanly.
   - Instead, it suggests a large stock of homes that remain in the same ownership for very long periods.
   - It looks less like churn-driven inventory and more like an embedded stock with weak recycling.
-
-### Decay-function interpretation
 
 The exponential decay fit captures not only how many homes sold recently, but how quickly ownership cohorts thin out as time passes.
 
@@ -2498,31 +2371,27 @@ For **condominiums**:
 
 - fitted decay parameter: **λ = 0.078**
 - intuitive interpretation: the count of condos remaining in a given “not sold since” cohort shrinks by about **7.8% per additional year** in exponential terms
-- implied half-life: about **8.9 years**
+- implied half-life: about **8.9 years** (it takes 8.9 years for 50% of all existing condos to change hands)
 
 This is strong evidence of a real **circulation circuit**. Condos behave like a housing segment that continually recycles through the market.
 
 For **single-family homes**:
 
-- fitted parameter: **λ = 0.015**
-- implied notional half-life: about **46.2 years**
+- fitted parameter: **λ = 0.011**
+- implied notional half-life: about **63.0 years** (it takes 63.0 years for 50% of all existing single-family to change hands)
 - but the fit is weak and should be interpreted cautiously
 
-That weak fit is important in itself. It shows that single-family homes do **not** follow a clean market-churn process because a substantial share of the stock is not behaving like ordinary circulating inventory at all.
+That weak fit is important in itself. It shows that single-family homes do **not** follow a clean market-churn process because a substantial share of the stock is not behaving like ordinary circulating inventory at all. Instead, much of it behaves like **legacy housing**: long-held owner-occupied residences, or long-held rental assets retained over decades.
 
-Instead, much of it behaves like **legacy housing**:
-
-- long-held owner-occupied residences,
-- or long-held rental assets retained over decades.
-
-### Why the decay result matters
-
-This is one of the strongest analytical links in the report.
+### Conclusions from 4(E) and 4(F):
 
 It shows that:
 
 - the condo market is not just **less owner-occupied**; it is also **structurally more recyclable**;
 - the single-family market is not just **more owner-occupied**; it is also **structurally less liquid**, with a much larger long-duration holding component.
+
+In other words:
+> **A large portion of San Francisco's single-family stock is effectively not for sale in any normal market sense.**
 
 That leads to an important economic implication:
 
@@ -2532,16 +2401,13 @@ In a city where prices are set at the margin, this matters enormously. The circu
 
 ### Broader civic interpretation
 
-Section 5F also points to a deeper civic balance.
-
 - The **legacy circuit** preserves rootedness, continuity, and neighborhood memory.
 - The **circulation circuit** enables entry, adaptation, and demographic renewal.
 
 A vibrant city needs both. But if too much of the stock remains locked in the legacy circuit, the city becomes increasingly hard for newcomers to enter. If the circulation circuit becomes too investor-oriented, access remains available mainly as a rental or investment channel rather than as long-term ownership opportunity.
 
 ---
-
-# Final interpretation
+# Overall Framework
 
 Taken together, the notebook is best understood through the framework of **Two Housing Circuits**.
 
@@ -2566,73 +2432,60 @@ This consists of homes that:
 
 This framework connects the report's maps, neighborhood rankings, age patterns, turnover summaries, and decay fits into one coherent structural interpretation.
 
+### Figure 14. San Francisco’s Two housing Circuits
+
+<p align="center">
+  <img src="./assets/14_two_housing_circuits_diagram.png" alt="Two Housing Circuits Diagram" width="100%">
+</p>
+
+<p align="center"><em>The stock is larger for single-family homes, but turnover is much higher for condos. In both segments, most recent purchases appear not to be owner-occupied.</em></p>
+
 ---
 
 ## Final synthesis of the seven major conclusions
 
-### 1. The city's value geography is highly unequal
+### 1. San Francisco’s housing geography is sharply unequal
 
-Even within the same property type, the spread between expensive and affordable neighborhoods is enormous.
+The city contains large neighborhood gaps even within the same property type. Single-family medians range from **$4.729M in Presidio Heights** to **$0.342M in Hunters Point**. On a per-square-foot basis, single-family values range from about **$1,199/sq ft in Telegraph Hill** to **$253/sq ft in Hunters Point**. These are distinct submarkets, not small deviations around a citywide average.
 
-- Single-family median assessed value ranges from about **$4.729M in Presidio Heights** to **$0.342M in Hunters Point**.
-- On a per-square-foot basis, single-family values range from about **$1,199/sq ft in Telegraph Hill** to **$253/sq ft in Hunters Point**.
+### 2. Single-family homes and condos play different structural roles
 
-These are not minor deviations around a citywide average. They reflect distinct submarkets shaped by prestige, land scarcity, urban history, redevelopment, and transaction patterns.
+Across the report, the same contrast appears repeatedly.
 
-### 2. Single-family homes and condos serve different structural roles
-
-Across the report, the contrast repeats again and again:
-
-- **Age:** many single-family neighborhoods are around or above a century old, while the youngest condo districts measure in single digits to the teens.
+- **Age:** single-family neighborhoods are often much older; many condo-heavy districts are products of more recent redevelopment.
 - **Turnover:** condos show a **20.2%** five-year turnover rate versus **9.0%** for single-family homes.
 - **Occupancy:** apparent owner occupancy is **55.6%** for single-family homes and **34.2%** for condos.
-- **Recent-purchase outcomes:** only **27.8%** of recently purchased single-family homes and **24.0%** of recently purchased condos appear owner-occupied.
-- **Holding periods:** condos show a clear circulation pattern with **λ = 0.078** and an implied half-life of **8.9 years**, while single-family homes show a weak, flatter pattern with **λ = 0.015** and a notional half-life of **46.2 years**.
+- **Recent purchases:** only **27.8%** of recently purchased single-family homes and **24.0%** of recently purchased condos appear owner-occupied.
+- **Holding periods:** condos show a much clearer circulation pattern with **λ = 0.078** and an implied half-life of **8.9 years**, while single-family homes show a much flatter pattern with **λ = 0.011** and a notional half-life of **63.0 years**.
 
-All of this strongly supports the Two Housing Circuits interpretation. Single-family homes behave much more like the **legacy circuit**. Condos behave much more like the **circulation circuit**.
+These results support the report’s core interpretation: **single-family homes behave more like the legacy circuit, while condos behave more like the circulation circuit**.
 
-### 3. The active market is much smaller than the total stock
+### 3. The active market is much smaller than the physical stock
 
-This may be the single most important conclusion in the report.
+This is the most important practical result in the report.
 
-San Francisco contains about **94,844** single-family homes, yet only **8,531** sold in the last five years. Meanwhile, a much smaller condo stock of **52,042** units generated **10,520** sales over the same period.
+San Francisco contains about **94,844** single-family homes, yet only **8,531** sold in the last five years. By contrast, the much smaller condo stock of **52,042** units generated **10,520** sales over the same period. The homes that actually absorb demand and help set current prices come from a much thinner pool than headline stock counts suggest.
 
-So the homes actually setting prices and absorbing new demand come from a much thinner pool than gross stock numbers suggest. The real battleground for entry is the **circulation circuit**, not the full housing stock.
+### 4. Proposition 13 is not a background detail; it shapes the reading of the entire dataset
 
-### 4. Investor-oriented outcomes appear in both property types
+The recent-sales comparison shows that all-stock neighborhood medians can materially understate current conditions in neighborhoods with many long-held properties. That does not make the dataset less useful. It means the roll should be read as both a valuation record and a record of ownership history.
 
-A particularly important result is that recently transacted units in **both** segments appear overwhelmingly outside the owner-occupied category after purchase.
+### 5. Investor-oriented outcomes appear in both property types
 
-This suggests that investor or non-owner-occupying demand is not confined to condos. Once a home enters the circulation market, both single-family homes and condos appear to face a similar competitive environment.
+A striking result is that recently purchased units in **both** segments appear overwhelmingly outside the owner-occupied category. The implication is that investor or non-owner-occupying demand is not confined to condos. Once a home enters the active market, both property types appear exposed to similar competitive pressure.
 
-That is a more nuanced—and more sobering—result than the familiar narrative that condos are the investor segment while single-family homes are protected for household buyers.
+### 6. The main bottleneck is circulation, not just stock
 
-### 5. Proposition 13 and long holding periods shape the assessor data
+The housing problem described here is not only about how many units exist. It is also about how many units actually return to market. The condo segment does far more of that work. The single-family segment contains a much larger share of long-held stock that contributes relatively little to current market access.
 
-Assessment values in California reflect ownership history as much as current market conditions. Long-held properties may carry values far below current market levels, while recent sales are much closer to contemporary conditions.
+### 7. The Two Housing Circuits framework ties the report together
 
-That institutional structure is not a side note. It is part of the market itself. It explains why recent-sales filtering is so informative and why a large part of the stock behaves like legacy housing.
+The value maps, age patterns, recent-sales filter, turnover tables, buyer-profile proxy, and holding-period distributions all point in the same direction.
 
-### 6. The deeper civic tension is continuity versus renewal
+- The **legacy circuit** is older, more tightly held, and slower to recycle.
+- The **circulation circuit** turns over more often, carries more of the burden of entry, and is where competition is most concentrated.
 
-The report ultimately points beyond prices alone.
-
-- The **legacy circuit** preserves continuity, memory, and long-term rootedness.
-- The **circulation circuit** enables entry, adaptation, and demographic renewal.
-
-A healthy city needs both. But when the legacy circuit becomes too dominant, the city can become closed to newcomers. When the circulation circuit becomes too investor-oriented, the city can remain active as a rental or investment market while becoming less attainable as a place for long-term ownership and household formation.
-
-### 7. Final takeaway
-
-San Francisco's housing challenge is not only a shortage of homes in the abstract.
-
-It is also a shortage of homes that are meaningfully:
-
-- **available**,
-- **circulating**,
-- and **accessible** to new owner-occupants.
-
-That is the core lesson of the notebook. The city does not simply contain expensive housing. It contains a large legacy stock that turns over slowly, alongside a much smaller circulation stock that bears most of the pressure of entry, investment demand, and price discovery. Understanding that distinction is essential for interpreting affordability, neighborhood change, and the long-run vitality of the city.
+That is the main conclusion of the project. San Francisco’s housing challenge is not only that housing is expensive. It is that a large share of the stock is structurally slow-moving, while the smaller circulating share bears most of the pressure of entry, investment demand, and price discovery.
 
 ---
 
